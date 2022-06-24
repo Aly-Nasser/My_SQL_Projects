@@ -1,11 +1,11 @@
-#My first SQL Project on Covid cases, deaths, and vaccinactions
+# My first SQL Project on Covid cases, deaths, and vaccinactions
 
-## AHOW ALL DATA THAT WE HAVE IN COVID_DEATHS
+###### AHOW ALL DATA THAT WE HAVE IN COVID_DEATHS
 SELECT *
 FROM covid_deaths
 ORDER BY 3, 4
 
-## SHOW THE ALL DATA THAT WE ARE GOING TO START WITH
+###### SHOW THE ALL DATA THAT WE ARE GOING TO START WITH
 SELECT location, date, total_cases, new_cases, total_deaths, population
 FROM covid_deaths
 ORDER BY 1, 2
