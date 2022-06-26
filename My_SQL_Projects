@@ -81,3 +81,44 @@ JOIN covid_vacci vac
 WHERE die.continent IS NOT NULL AND new_vaccinations IS NOT NULL)
 SELECT * , ROUND((RollingPeopleVaccinated/population),4) *100 AS 'Vac_Percentage'
 from popvsvac
+
+**ROLLING PEOPLE VACCINATED IN 22 ARABIAN COUNTRY**
+WITH popvsvac( location , date, population,new_vaccinations, RollingPeopleVaccinated) AS
+(SELECT die.location , die.date , die.population , vac.new_vaccinations , SUM(CONVERT(BIGINT,vac.new_vaccinations)) OVER (PARTITION BY die.location ORDER BY die.location , die.date) AS RollingPeopleVaccinated
+FROM covid_deaths die
+JOIN covid_vacci vac 
+		ON die.location = vac.location
+		AND die.date = vac.date
+WHERE new_vaccinations IS NOT NULL AND vac.location IN('Algeria', 'Bahrain', 'Egypt', 'Iraq', 'Jordan', 'Kuwait', 'Libya', 'Oman', 'Palestine','Qatar' ,'Saudi Arabia','Somalia' ,'Sudan' ,'Syria' ,'Tunisia' ,'United Arab Emirates','Yemen' ,'Comoros', 'Mauritania' ,'Lebanon','Djibouti' ,'Morocco') ) 
+
+SELECT * , ROUND((RollingPeopleVaccinated/population),4) *100 AS 'Vac_Percentage'
+from popvsvac
+
+**Using Temp Table to perform Calculation on Partition By in previous query**
+DROP TABLE IF EXISTS #PercentPopulationVaccinated
+CREATE TABLE #PercentPopulationVaccinated
+(Continent nvarchar(255),
+location VARCHAR(255),
+date DATETIME,
+population numeric,
+New_vaccinations numeric,
+RollingPeopleVaccinated numeric)
+
+Insert into #PercentPopulationVaccinated
+SELECT die.continent, die.location , die.date , die.population , vac.new_vaccinations , SUM(CONVERT(BIGINT,vac.new_vaccinations)) OVER (PARTITION BY die.location ORDER BY die.location , die.date) AS RollingPeopleVaccinated
+FROM covid_deaths die
+JOIN covid_vacci vac 
+		ON die.location = vac.location
+		AND die.date = vac.date
+--WHERE die.continent IS NOT NULL
+Select *, (RollingPeopleVaccinated/Population)*100
+From #PercentPopulationVaccinated
+
+**CREATE A VIEW TO STORE DATA FOR LATER VISUALIZATION**
+CREATE VIEW PercentPopulationVaccinated AS
+SELECT die.continent, die.location , die.date , die.population , vac.new_vaccinations , SUM(CONVERT(BIGINT,vac.new_vaccinations)) OVER (PARTITION BY die.location ORDER BY die.location , die.date) AS RollingPeopleVaccinated
+FROM covid_deaths die
+JOIN covid_vacci vac 
+		ON die.location = vac.location
+		AND die.date = vac.date
+WHERE die.continent IS NOT NULL
