@@ -5,7 +5,7 @@
     2. Film Rental Store Analysis
     3. Film rental store analysis for investment purposes
     4. analyzing traffic resource
-    5. 
+    5. Corona Virus analysis Project for the Arabian Countries
     6. Analysing Chicago data(community, schools, crime)
 
 
