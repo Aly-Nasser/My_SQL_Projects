@@ -107,11 +107,3 @@ SELECT
     AVG(CASE WHEN actor_award.actor_id IS NULL THEN 0 ELSE 1 END) AS '% One Film'
 FROM actor_award
 GROUP BY number_of_awards;
-
-
-
-
-
-
-
-
